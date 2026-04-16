@@ -1,12 +1,22 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
 const app = express();
 
-app.use(express.static("."));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Serve static files
+app.use(express.static(__dirname));
+
+// Force homepage route
 app.get("/", (req, res) => {
-  res.sendFile(process.cwd() + "/index.html");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
 });
