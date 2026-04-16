@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Input Firewall</title>
+</head>
+<body>
+
+<h2>AI Firewall Test App</h2>
+
+<input id="input" placeholder="Paste anything here" style="width:300px; padding:10px;">
+<button onclick="submit()">Submit</button>
+
+<div id="status"></div>
+
+<script src="firewall.js"></script>
+
+<script>
+function submit() {
+  let val = document.getElementById("input").value;
+
+  if (window.AIInputFirewall) {
+    val = window.AIInputFirewall.clean(val);
+  }
+
+  document.getElementById("status").innerText = "Submitted: " + val;
+}
+</script>
+
+</body>
+</html>
