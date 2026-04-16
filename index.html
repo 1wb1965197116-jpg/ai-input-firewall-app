@@ -5,25 +5,57 @@
 </head>
 <body>
 
-<h2>AI Firewall Test App</h2>
+<h2>AI Firewall Active</h2>
 
-<input id="input" placeholder="Paste anything here" style="width:300px; padding:10px;">
+<input id="input" placeholder="Paste here" style="width:300px; padding:10px;">
 <button onclick="submit()">Submit</button>
 
-<div id="status"></div>
+<div id="status">Waiting for input...</div>
 
 <script src="firewall.js"></script>
 
 <script>
+/* =========================
+   PASTE DEBUG (optional)
+========================= */
+document.addEventListener("paste", function(e) {
+  console.log("PASTE DETECTED:", e.clipboardData.getData("text"));
+});
+
+/* =========================
+   SUBMIT FLOW
+========================= */
 function submit() {
   let val = document.getElementById("input").value;
 
+  // Use your SDK if available
   if (window.AIInputFirewall) {
     val = window.AIInputFirewall.clean(val);
   }
 
-  document.getElementById("status").innerText = "Submitted: " + val;
+  document.getElementById("status").innerText =
+    "Submitted (cleaned): " + val;
 }
+
+/* =========================
+   LIVE AUTO CLEAN (optional UX)
+========================= */
+document.getElementById("input").addEventListener("input", function (e) {
+  let val = e.target.value;
+
+  if (window.AIInputFirewall) {
+    let cleaned = window.AIInputFirewall.clean(val);
+
+    if (val !== cleaned) {
+      e.target.value = cleaned;
+      document.getElementById("status").innerText =
+        "Dirty input detected → auto cleaned";
+    } else {
+      document.getElementById("status").innerText =
+        "Clean input ✔";
+    }
+  }
+});
 </script>
 
 </body>
